@@ -1,8 +1,10 @@
-#ifndef MPU6050_TOCKN_H
-#define MPU6050_TOCKN_H
+#ifndef MPU6050_SLOPED_H
+#define MPU6050_SLOPED_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "Wire.h"
+
+
 
 #define MPU6050_ADDR         0x68
 #define MPU6050_SMPLRT_DIV   0x19
@@ -45,13 +47,13 @@ class MPU6050{
 
   float getGyroX(){ return gyroX; };
   float getGyroY(){ return gyroY; };
-  float getGyroZ(){ return gyroZ; };
+  double getGyroZ(){ return gyroZ; };
 
-	void calcGyroOffsets(bool console = false, uint16_t delayBefore = 1000, uint16_t delayAfter = 3000);
+	void calibrateGyro(bool console = false, bool evaluate = true, uint16_t delayBefore = 1000, uint16_t delayAfter = 2000);
 
   float getGyroXoffset(){ return gyroXoffset; };
   float getGyroYoffset(){ return gyroYoffset; };
-  float getGyroZoffset(){ return gyroZoffset; };
+  double getGyroZoffset(){ return gyroZoffset; };
 
   void update();
 
@@ -60,32 +62,62 @@ class MPU6050{
 
   float getGyroAngleX(){ return angleGyroX; };
   float getGyroAngleY(){ return angleGyroY; };
-  float getGyroAngleZ(){ return angleGyroZ; };
+  double getGyroAngleZ(){ return angleGyroZ; };
 
   float getAngleX(){ return angleX; };
   float getAngleY(){ return angleY; };
-  float getAngleZ(){ return angleZ; };
+  double getAngleZ(){ return angleZ; };
+
+  double slopempu();
+
+  void setsenstivity(double value)
+  {
+    senstivity = value;
+  }
+
+  double bhaluuZangle();
+
+  void resetparams();
+
 
   private:
-
+  void evaluatesensordata();
   TwoWire *wire;
 
   int16_t rawAccX, rawAccY, rawAccZ, rawTemp,
   rawGyroX, rawGyroY, rawGyroZ;
 
-  float gyroXoffset, gyroYoffset, gyroZoffset;
+  float gyroXoffset, gyroYoffset;
+  double gyroZoffset;
 
-  float temp, accX, accY, accZ, gyroX, gyroY, gyroZ;
+  float temp, accX, accY, accZ, gyroX, gyroY;
+  double gyroZ;
 
-  float angleGyroX, angleGyroY, angleGyroZ,
-  angleAccX, angleAccY, angleAccZ;
+  float angleGyroX, angleGyroY;
+  double angleGyroZ;
+  float angleAccX, angleAccY, angleAccZ;
 
-  float angleX, angleY, angleZ;
+  float angleX, angleY;
+  double angleZ;
 
-  float interval;
+  double interval;
   long preInterval;
 
   float accCoef, gyroCoef;
+
+//shahab's variables for slopes
+  double previous = 0;
+  double slope =0;
+  unsigned long previoustime = 0;
+  int duration = 50;
+  double diff =0;
+//getrectified parameters
+  double start =0;
+  double senstivity = 0.15;
+  double diff2 =0;
+  double angle =0;
 };
+
+
 
 #endif
