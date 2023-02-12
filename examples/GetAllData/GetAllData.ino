@@ -37,7 +37,7 @@ void loop() {
     
     Serial.print("angleX : ");Serial.print(mpu6050.getAngleX());
     Serial.print("\tangleY : ");Serial.print(mpu6050.getAngleY());
-    Serial.print("\tangleZ : ");  //Serial.println(mpu6050.getAngleY());//noisy Z value
+    Serial.print("\tangleZ : ");  //Serial.println(mpu6050.getAngleZ());//noisy Z value
     Serial.println(mpu6050.bhaluuZangle());//stable Z angle
     Serial.println("=======================================================\n");
     timer = millis();
