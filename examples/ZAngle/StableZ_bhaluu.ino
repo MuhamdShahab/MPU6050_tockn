@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(9600);
   Wire.begin();
   mpu6050.begin();
-  mpu6050.calcGyroOffsets(true);
+  mpu6050.calibrateGyro(true);
 }
 
 void loop() {
